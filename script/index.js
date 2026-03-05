@@ -3,12 +3,21 @@ const loadLessons=()=>{
     .then(res=>res.json())
         .then(json => displayLessons(json.data))
 };
+
+const removeActive=()=>{
+    const lessonButtons = document.querySelectorAll(".lesson-btn");
+    lessonButtons.forEach(btn=> btn.classList.remove('active'));
+}
 const loadLevelWord = (id) =>{
     console.log(id);
     const url = `https://openapi.programming-hero.com/api/level/${id}`
     fetch(url)
     .then(res=>res.json())
-        .then(data => displayLevelWord(data.data));
+        .then(data =>{ 
+            removeActive()
+            const clickBtn = document.getElementById(`lesson-btn-${id}`)
+            clickBtn.classList.add('active');
+            displayLevelWord(data.data)});
 }
 const displayLevelWord=(words)=>{
     const wordContainer = document.getElementById('word-container');
@@ -30,7 +39,7 @@ const displayLevelWord=(words)=>{
         <p class="font-semibold">Meaning /Pronounciation</p>
         <div class="text-2xl font-medium font-bangla">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি"} / ${word.pronunciation?word.pronunciation : "Pronunciation পাওয়া যায়নি" }"</div>
         <div class="flex justify-between items-center">
-            <button class="btn bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-circle-info"></i></button>
+            <button onclick="my_modal_5.showModal()" class="btn bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-circle-info"></i></button>
             <button class="btn  bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-volume-high"></i></button>
         </div>
     </div>
@@ -47,7 +56,7 @@ const displayLessons =(lessons)=>{
         // 3. create element
         const btnDiv = document.createElement('div');
         btnDiv.innerHTML = `
-            <button onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary">
+            <button id='lesson-btn-${lesson.level_no}' onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary lesson-btn">
             <i class="fa-solid fa-book-open"></i>Lesson - ${lesson.level_no}
             </button>
         `
