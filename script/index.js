@@ -1,3 +1,8 @@
+const createElements = (arr) => {
+    const htmlElements = arr.map(el => `<span class="btn">${el}</span>`);
+    return (htmlElements.join(" "));
+}
+
 const loadLessons=()=>{
     fetch('https://openapi.programming-hero.com/api/levels/all')
     .then(res=>res.json())
@@ -9,7 +14,6 @@ const removeActive=()=>{
     lessonButtons.forEach(btn=> btn.classList.remove('active'));
 }
 const loadLevelWord = (id) =>{
-    console.log(id);
     const url = `https://openapi.programming-hero.com/api/level/${id}`
     fetch(url)
     .then(res=>res.json())
@@ -21,13 +25,11 @@ const loadLevelWord = (id) =>{
 }
 const loadWordDetail=async(id)=>{
     const url = `https://openapi.programming-hero.com/api/word/${id}`;
-    console.log(url);
     const res = await fetch (url);
     const details = await res.json();
     displayWordDetails(details.data);
 }
 const displayWordDetails = (word) =>{
-    console.log(word);
     const detailsBox = document.getElementById('details-container');
     detailsBox.innerHTML = `
         <div class="">
@@ -38,14 +40,12 @@ const displayWordDetails = (word) =>{
                 <p>${word.meaning}</p>
             </div>
             <div class="">
-                <h2 class="font-bold">${word.sentence}</h2>
-                <p>Lorem ipsum dolor sit amet.</p>
+                <h2 class="font-bold">Example</h2>
+                <p>${word.sentence}</p>
             </div>
             <div class="">
-                <h2 class="font-bold">Synoym</h2>
-                <span class="btn">Syn1</span>
-                <span class="btn">Syn1</span>
-                <span class="btn">Syn1</span>
+                <h2 class="font-bold">Synonym</h2>
+                <div class="">${createElements(word.synonyms)}</div>
             </div>
     `
     document.getElementById('word_modal').showModal();
